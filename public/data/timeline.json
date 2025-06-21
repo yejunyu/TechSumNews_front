@@ -1,0 +1,114 @@
+{
+  "events": [
+    {
+      "id": "t1",
+      "title": "OpenAI发布GPT-5",
+      "description": "OpenAI正式发布GPT-5模型，AI能力再次突破，在推理能力、多模态理解和代码生成方面都有显著提升。",
+      "date": "2024-06-20T10:00:00.000Z",
+      "category": "ai",
+      "importance": "high",
+      "relatedNews": ["1"],
+      "tags": ["OpenAI", "GPT-5", "大语言模型"],
+      "imageUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400"
+    },
+    {
+      "id": "t2",
+      "title": "苹果WWDC 2024",
+      "description": "iOS 18发布，首次深度集成AI功能，包括Apple Intelligence框架和全新的Siri 2.0。",
+      "date": "2024-06-19T14:30:00.000Z",
+      "category": "mobile",
+      "importance": "high",
+      "relatedNews": ["2"],
+      "tags": ["苹果", "iOS 18", "WWDC"],
+      "imageUrl": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400"
+    },
+    {
+      "id": "t3",
+      "title": "特斯拉FSD V12发布",
+      "description": "完全自动驾驶技术重大升级，采用端到端神经网络架构，城市道路干预率降低85%。",
+      "date": "2024-06-18T09:15:00.000Z",
+      "category": "hardware",
+      "importance": "medium",
+      "relatedNews": ["3"],
+      "tags": ["特斯拉", "FSD", "自动驾驶"],
+      "imageUrl": "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=400"
+    },
+    {
+      "id": "t4",
+      "title": "Windows 12预览版发布",
+      "description": "微软发布首个AI原生桌面操作系统，深度集成Copilot AI助手和智能工作流。",
+      "date": "2024-06-17T16:45:00.000Z",
+      "category": "software",
+      "importance": "medium",
+      "relatedNews": ["4"],
+      "tags": ["微软", "Windows 12", "AI操作系统"],
+      "imageUrl": "https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=400"
+    },
+    {
+      "id": "t5",
+      "title": "字节跳动发布豆包大模型",
+      "description": "国产AI大模型新突破，在中文理解和多模态能力方面表现出色，挑战GPT-4。",
+      "date": "2024-06-16T11:20:00.000Z",
+      "category": "ai",
+      "importance": "high",
+      "relatedNews": ["5"],
+      "tags": ["字节跳动", "豆包", "大模型"],
+      "imageUrl": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400"
+    },
+    {
+      "id": "t6",
+      "title": "谷歌量子计算突破",
+      "description": "Willow量子芯片首次实现大规模量子纠错，为实用化量子计算铺平道路。",
+      "date": "2024-06-15T13:10:00.000Z",
+      "category": "hardware",
+      "importance": "high",
+      "relatedNews": ["6"],
+      "tags": ["谷歌", "量子计算", "Willow"],
+      "imageUrl": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400"
+    },
+    {
+      "id": "t7",
+      "title": "Meta发布Llama 3.1",
+      "description": "Meta开源大模型Llama 3.1正式发布，参数规模达到4050亿，性能媲美GPT-4。",
+      "date": "2024-06-14T08:30:00.000Z",
+      "category": "ai",
+      "importance": "medium",
+      "relatedNews": [],
+      "tags": ["Meta", "Llama", "开源模型"],
+      "imageUrl": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400"
+    },
+    {
+      "id": "t8",
+      "title": "英伟达发布RTX 5090",
+      "description": "新一代旗舰显卡RTX 5090发布，AI计算性能提升300%，支持实时光线追踪。",
+      "date": "2024-06-13T15:20:00.000Z",
+      "category": "hardware",
+      "importance": "medium",
+      "relatedNews": [],
+      "tags": ["英伟达", "RTX 5090", "显卡"],
+      "imageUrl": "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400"
+    },
+    {
+      "id": "t9",
+      "title": "亚马逊推出AWS AI服务",
+      "description": "亚马逊云服务推出全新AI平台，集成机器学习、自然语言处理和计算机视觉能力。",
+      "date": "2024-06-12T12:00:00.000Z",
+      "category": "cloud",
+      "importance": "low",
+      "relatedNews": [],
+      "tags": ["亚马逊", "AWS", "云计算"],
+      "imageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400"
+    },
+    {
+      "id": "t10",
+      "title": "华为鸿蒙OS 5.0发布",
+      "description": "华为发布鸿蒙OS 5.0，完全脱离Android，实现全场景智能互联。",
+      "date": "2024-06-11T10:45:00.000Z",
+      "category": "mobile",
+      "importance": "medium",
+      "relatedNews": [],
+      "tags": ["华为", "鸿蒙OS", "操作系统"],
+      "imageUrl": "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400"
+    }
+  ]
+}
