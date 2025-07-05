@@ -6,10 +6,19 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "highlights",
+      component: () => import("../views/HighlightsView.vue"),
+      meta: {
+        title: "首页 - Highlights",
+        keepAlive: true,
+      },
+    },
+    {
+      path: "/techsum",
+      name: "techsum",
       component: () => import("../views/HomeView.vue"),
       meta: {
-        title: "首页 - TechSum",
+        title: "TechSum - 精选内容",
         keepAlive: true,
       },
     },
@@ -19,15 +28,6 @@ const router = createRouter({
       component: () => import("../views/EventsView.vue"),
       meta: {
         title: "科技事件 - TechSum",
-        keepAlive: true,
-      },
-    },
-    {
-      path: "/highlights",
-      name: "highlights",
-      component: () => import("../views/HighlightsView.vue"),
-      meta: {
-        title: "精选内容 - TechSum",
         keepAlive: true,
       },
     },

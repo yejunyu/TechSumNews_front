@@ -106,7 +106,7 @@
         </div>
 
         <!-- 右侧：时间线 -->
-        <div class="space-y-6">
+        <div class="space-y-6" v-show="false">
           <!-- 时间线标题 -->
           <div class="bg-white rounded-lg shadow-card p-6">
             <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">

@@ -115,9 +115,9 @@ const showMobileMenu = ref(false);
 
 // 导航菜单项
 const navItems = [
-  { name: "TechSum", path: "/" },
+  { name: "Highlights", path: "/" },
   { name: "Events", path: "/events" },
-  { name: "Highlights", path: "/highlights" },
+  { name: "TechSum", path: "/techsum" },
 ];
 
 // 方法
