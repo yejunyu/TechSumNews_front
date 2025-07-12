@@ -127,7 +127,9 @@ const startAutoPlay = () => {
   stopAutoPlay();
   if (!event.value?.images?.length || event.value.images.length <= 1) return;
   timer = setInterval(() => {
-    currentSlide.value = (currentSlide.value + 1) % event.value.images.length;
+    if (event.value && event.value.images) {
+      currentSlide.value = (currentSlide.value + 1) % event.value.images.length;
+    }
   }, 3500);
 };
 const stopAutoPlay = () => {
