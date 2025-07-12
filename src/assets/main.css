@@ -1,265 +1,127 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-/* 自定义基础样式 */
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      "Helvetica Neue", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: fantasy --default, dark --prefersdark;
 }
 
-/* 自定义组件样式 */
-/* @layer components {
-  .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-blue-500 hover:border-blue-600 text-lg;
-  }
+/* 🎨 TechSum 主题色彩系统 */
+/* 基于DaisyUI Fantasy(浅色) + Dark(深色)主题优化 */
 
-  .btn-secondary {
-    @apply bg-white text-gray-700 px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 transition-all duration-300;
-  }
-
-  .card {
-    @apply bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300;
-  }
-
-  .gradient-bg {
-    @apply bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50;
-  }
-
-  .gradient-text {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
-  }
-
-  .nav-link {
-    @apply text-gray-600 hover:text-blue-600 font-medium transition-colors duration-200 relative;
-  }
-
-  .nav-link.active {
-    @apply text-blue-600;
-  }
-
-  .nav-link.active::after {
-    content: "";
-    @apply absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full;
-  }
-} */
-
-/* 自定义工具类 */
-@layer utilities {
-  .text-shadow {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .backdrop-blur-glass {
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.8);
-  }
-
-  .line-clamp-1 {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+/* ✨ 渐变文字效果 */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--p)) 0%,
+    hsl(var(--s)) 50%,
+    hsl(var(--a)) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease-in-out infinite;
 }
 
-/* 暗色主题样式 */
-@layer base {
-  .dark {
-    color-scheme: dark;
-  }
-
-  .dark body {
-    @apply bg-gray-900 text-white;
-  }
-
-  .dark .card {
-    @apply bg-gray-800 border-gray-700;
-  }
-
-  .dark .gradient-bg {
-    @apply bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900;
-  }
-
-  .dark .backdrop-blur-glass {
-    backdrop-filter: blur(10px);
-    background-color: rgba(17, 24, 39, 0.8);
-  }
-}
-
-/* 滚动条样式 */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-gray-100;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 hover:bg-gray-400;
-  border-radius: 3px;
-}
-
-.dark ::-webkit-scrollbar-track {
-  @apply bg-gray-800;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-gray-600 hover:bg-gray-500;
-}
-
-/* 动画效果 */
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
-  }
+@keyframes gradient-shift {
+  0%,
   100% {
-    background-position: calc(200px + 100%) 0;
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
-.shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200px 100%;
-  animation: shimmer 1.5s infinite;
+/* 🌈 渐变背景 */
+.bg-gradient-bg {
+  background-color: hsl(var(--b1));
 }
 
-.dark .shimmer {
-  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
-  background-size: 200px 100%;
+/* 🌟 增强的主题色彩 */
+[data-theme="fantasy"] {
+  --p: 320 100% 47%; /* 玫瑰红 #f000b8 */
+  --s: 184 100% 50%; /* 青色 #00f5ff */
+  --a: 194 100% 50%; /* 亮青色 #00d9ff */
+  --b1: 0 0% 100%; /* 纯白背景 */
+  --b2: 210 20% 98%; /* 微蓝白色 */
+  --b3: 210 20% 95%; /* 浅灰蓝 */
+  --bc: 215 28% 17%; /* 深蓝灰文字 */
 }
 
-/* Element Plus 组件自定义样式 */
-.el-button {
-  border-radius: 8px !important;
+[data-theme="dark"] {
+  --p: 210 100% 50%; /* 蓝色 #007fff */
+  --s: 262 83% 74%; /* 紫色 #a991f7 */
+  --a: 194 100% 50%; /* 青色 #00d9ff */
+  --b1: 220 13% 18%; /* 深色背景 */
+  --b2: 220 13% 14%; /* 更深背景 */
+  --b3: 220 13% 10%; /* 最深背景 */
+  --bc: 220 13% 85%; /* 浅色文字 */
 }
 
-.el-input__wrapper {
-  border-radius: 8px !important;
-}
-
-.el-card {
-  border-radius: 12px !important;
-}
-
-.el-tag {
-  border-radius: 6px !important;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .container {
-    @apply px-4;
-  }
-}
-
-/* 页面过渡动画 */
-.page-enter-active,
-.page-leave-active {
+/* 🎯 专用组件色彩优化 */
+.tech-card {
+  @apply bg-base-100 border border-base-300 shadow-lg;
   transition: all 0.3s ease;
 }
 
-.page-enter-from {
-  opacity: 0;
-  transform: translateX(20px);
+.tech-card:hover {
+  @apply shadow-xl border-primary/20;
+  transform: translateY(-2px);
 }
 
-.page-leave-to {
-  opacity: 0;
-  transform: translateX(-20px);
+.tech-badge-primary {
+  @apply bg-primary/10 text-primary border border-primary/20;
 }
 
-/* 淡入淡出动画 */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+.tech-badge-secondary {
+  @apply bg-secondary/10 text-secondary border border-secondary/20;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.tech-badge-accent {
+  @apply bg-accent/10 text-accent border border-accent/20;
 }
 
-/* 加载动画 */
-.loading-spinner {
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
+/* 📱 响应式标题优化 */
+.tech-title {
+  @apply text-base-content font-bold;
+  text-shadow: 0 1px 2px hsl(var(--b3) / 0.1);
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.tech-subtitle {
+  @apply text-base-content/70;
 }
 
-/* 打字机效果 */
-.typewriter {
-  overflow: hidden;
-  border-right: 2px solid;
-  white-space: nowrap;
-  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 10;
 }
 
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
+/* 🔍 搜索和交互元素优化 */
+.tech-btn-primary {
+  @apply btn btn-primary shadow-lg;
 }
 
-@keyframes blink-caret {
-  from,
-  to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: currentColor;
-  }
+.tech-btn-secondary {
+  @apply btn btn-secondary shadow-lg;
+}
+
+/* 💫 特殊效果 */
+.glass-effect {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--b1) / 0.8) 0%,
+    hsl(var(--b2) / 0.6) 100%
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid hsl(var(--b3) / 0.2);
+}
+
+/* 🌓 主题切换动画 */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
 }

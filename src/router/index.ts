@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAppStore } from "@/stores/app";
+import EventDetailView from "@/views/EventDetailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
         title: "科技事件 - TechSum",
         keepAlive: true,
       },
+    },
+    {
+      path: "/events/:group_title",
+      name: "EventDetail",
+      component: EventDetailView,
     },
     {
       path: "/news/:id",

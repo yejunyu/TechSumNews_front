@@ -13,14 +13,14 @@
 
       <div class="space-y-4">
         <div class="flex justify-center space-x-4">
-          <el-button type="primary" @click="goHome" size="large">
-            <el-icon class="mr-2"><House /></el-icon>
+          <button class="btn btn-primary btn-lg" @click="goHome">
+            <House class="w-5 h-5 mr-2" />
             返回首页
-          </el-button>
-          <el-button @click="goBack" size="large">
-            <el-icon class="mr-2"><ArrowLeft /></el-icon>
+          </button>
+          <button class="btn btn-lg" @click="goBack">
+            <ArrowLeft class="w-5 h-5 mr-2" />
             返回上页
-          </el-button>
+          </button>
         </div>
 
         <div class="text-sm text-gray-500">或者尝试搜索您需要的内容</div>
@@ -36,7 +36,7 @@
               <el-icon><Search /></el-icon>
             </template>
             <template #append>
-              <el-button @click="handleSearch">搜索</el-button>
+              <button class="btn" @click="handleSearch">搜索</button>
             </template>
           </el-input>
         </div>
@@ -83,7 +83,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { House, ArrowLeft, Search } from "@element-plus/icons-vue";
+import {
+  HomeIcon as House,
+  ArrowLeftIcon as ArrowLeft,
+  MagnifyingGlassIcon as Search,
+} from "@heroicons/vue/24/outline";
 
 const router = useRouter();
 const searchKeyword = ref("");

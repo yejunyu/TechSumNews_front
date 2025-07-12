@@ -18,48 +18,54 @@
       <div class="container mx-auto px-6 py-4">
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex-1">
-            <el-input
-              v-model="searchInput"
-              placeholder="搜索新闻、事件..."
-              @keyup.enter="handleSearch"
-              size="large"
-            >
-              <template #prefix>
-                <el-icon><Search /></el-icon>
-              </template>
-              <template #append>
-                <el-button @click="handleSearch">搜索</el-button>
-              </template>
-            </el-input>
+            <div class="join w-full">
+              <div class="relative flex-1">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2">
+                  <Search class="w-5 h-5 text-gray-400" />
+                </span>
+                <input
+                  v-model="searchInput"
+                  type="text"
+                  placeholder="搜索新闻、事件..."
+                  @keyup.enter="handleSearch"
+                  class="input input-bordered input-lg w-full join-item pl-12"
+                />
+              </div>
+              <button
+                @click="handleSearch"
+                class="tech-btn-primary btn-lg join-item"
+              >
+                搜索
+              </button>
+            </div>
           </div>
 
           <div class="flex gap-2">
-            <el-select
+            <select
               v-model="selectedCategory"
-              placeholder="分类"
               @change="handleFilter"
-              class="w-32"
+              class="select select-sm w-32"
             >
-              <el-option label="全部" value="all" />
-              <el-option
+              <option value="all">全部</option>
+              <option
                 v-for="category in categories"
                 :key="category.id"
-                :label="category.name"
                 :value="category.slug"
-              />
-            </el-select>
+              >
+                {{ category.name }}
+              </option>
+            </select>
 
-            <el-select
+            <select
               v-model="sortBy"
-              placeholder="排序"
               @change="handleSort"
-              class="w-32"
+              class="select select-sm w-32"
             >
-              <el-option label="相关性" value="relevance" />
-              <el-option label="最新" value="publishTime" />
-              <el-option label="热门" value="viewCount" />
-              <el-option label="点赞" value="likes" />
-            </el-select>
+              <option value="relevance">相关性</option>
+              <option value="publishTime">最新</option>
+              <option value="viewCount">热门</option>
+              <option value="likes">点赞</option>
+            </select>
           </div>
         </div>
 
@@ -67,19 +73,22 @@
         <div v-if="searchHistory.length > 0 && !searchKeyword" class="mt-4">
           <div class="flex items-center space-x-2 mb-2">
             <span class="text-sm text-gray-600">搜索历史:</span>
-            <el-button text type="danger" size="small" @click="clearHistory"
-              >清除</el-button
+            <button
+              class="btn btn-link btn-sm text-error"
+              @click="clearHistory"
             >
+              清除
+            </button>
           </div>
           <div class="flex flex-wrap gap-2">
-            <el-tag
+            <span
               v-for="keyword in searchHistory.slice(0, 10)"
               :key="keyword"
-              class="cursor-pointer"
+              class="badge badge-outline badge-sm cursor-pointer"
               @click="searchFromHistory(keyword)"
             >
               {{ keyword }}
-            </el-tag>
+            </span>
           </div>
         </div>
       </div>
@@ -88,11 +97,12 @@
     <!-- 搜索结果 -->
     <div class="container mx-auto px-6 py-8">
       <div v-if="loading" class="flex justify-center py-12">
-        <el-loading />
+        <span class="loading loading-spinner loading-lg"></span>
       </div>
 
       <div v-else-if="filteredResults.length === 0" class="text-center py-12">
-        <el-empty description="没有找到相关结果" />
+        <div class="text-gray-400 text-6xl mb-4">🔍</div>
+        <p class="text-gray-600 text-lg">没有找到相关结果</p>
         <div class="mt-4">
           <p class="text-gray-600 mb-4">尝试以下建议:</p>
           <ul class="text-sm text-gray-500 space-y-1">
@@ -147,7 +157,7 @@
                   <div
                     class="flex items-center space-x-1 text-sm text-gray-500"
                   >
-                    <el-icon><Star /></el-icon>
+                    <Star class="w-4 h-4" />
                     <span>{{ item.likes }}</span>
                   </div>
                 </div>
@@ -156,14 +166,13 @@
               <!-- 匹配的标签 -->
               <div v-if="getMatchingTags(item).length > 0" class="mt-3">
                 <div class="flex flex-wrap gap-1">
-                  <el-tag
+                  <span
                     v-for="tag in getMatchingTags(item)"
                     :key="tag"
-                    size="small"
-                    type="success"
+                    class="badge badge-success badge-sm"
                   >
                     {{ tag }}
-                  </el-tag>
+                  </span>
                 </div>
               </div>
             </div>
@@ -199,7 +208,10 @@ import {
   formatNumber,
   highlightKeyword,
 } from "@/utils/formatUtils";
-import { Search, Star } from "@element-plus/icons-vue";
+import {
+  MagnifyingGlassIcon as Search,
+  StarIcon as Star,
+} from "@heroicons/vue/24/outline";
 import type { NewsItem } from "@/types/news";
 
 const route = useRoute();
@@ -402,42 +414,45 @@ onMounted(async () => {
 }
 
 .category-tag {
-  @apply inline-block px-3 py-1 text-sm font-medium rounded-full;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 9999px;
 }
 
 .category-tag-ai {
-  @apply bg-blue-100 text-blue-800;
+  background-color: #dbeafe;
+  color: #1e40af;
 }
 
 .category-tag-blockchain {
-  @apply bg-purple-100 text-purple-800;
+  background-color: #e9d5ff;
+  color: #7c3aed;
 }
 
 .category-tag-internet {
-  @apply bg-green-100 text-green-800;
+  background-color: #dcfce7;
+  color: #166534;
 }
 
 .category-tag-hardware {
-  @apply bg-orange-100 text-orange-800;
+  background-color: #fed7aa;
+  color: #ea580c;
 }
 
 .category-tag-software {
-  @apply bg-indigo-100 text-indigo-800;
+  background-color: #e0e7ff;
+  color: #4338ca;
 }
 
 .category-tag-mobile {
-  @apply bg-cyan-100 text-cyan-800;
+  background-color: #cffafe;
+  color: #0891b2;
 }
 
 .category-tag-cloud {
-  @apply bg-lime-100 text-lime-800;
-}
-
-:deep(.el-input-group__append) {
-  @apply bg-primary-600 text-white border-primary-600;
-}
-
-:deep(.el-input-group__append:hover) {
-  @apply bg-primary-700;
+  background-color: #ecfccb;
+  color: #65a30d;
 }
 </style>

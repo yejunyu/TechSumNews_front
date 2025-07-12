@@ -1,6 +1,6 @@
 <template>
   <article
-    class="news-card bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 cursor-pointer"
+    class="news-card tech-card rounded-lg overflow-hidden cursor-pointer"
     @click="handleClick"
   >
     <!-- 图片区域 -->
@@ -12,20 +12,19 @@
         loading="lazy"
       />
       <div class="absolute top-2 left-2">
-        <el-tag
-          :color="getCategoryColor(news.category)"
-          class="text-white border-0"
-          size="small"
+        <span
+          :style="{ backgroundColor: getCategoryColor(news.category) }"
+          class="badge badge-sm text-white border-0"
         >
           {{ getCategoryName(news.category) }}
-        </el-tag>
+        </span>
       </div>
       <div class="absolute top-2 right-2 flex flex-col gap-1">
-        <el-tag v-if="news.isHot" type="danger" size="small">热门</el-tag>
-        <el-tag v-if="news.hasTimeline" type="primary" size="small">
-          <el-icon class="mr-1"><Clock /></el-icon>
+        <span v-if="news.isHot" class="badge badge-error badge-sm">热门</span>
+        <span v-if="news.hasTimeline" class="badge badge-primary badge-sm">
+          <Clock class="w-3 h-3 mr-1" />
           时间线
-        </el-tag>
+        </span>
       </div>
     </div>
 
@@ -42,16 +41,13 @@
 
       <!-- 标签 -->
       <div v-if="news.tags && news.tags.length > 0" class="mb-3">
-        <el-tag
+        <span
           v-for="tag in news.tags.slice(0, 3)"
           :key="tag"
-          size="small"
-          class="mr-1 mb-1"
-          type="info"
-          effect="plain"
+          class="badge badge-outline badge-sm mr-1 mb-1"
         >
           {{ tag }}
-        </el-tag>
+        </span>
       </div>
 
       <!-- 底部信息 -->
@@ -63,11 +59,11 @@
         </div>
         <div class="flex items-center space-x-3">
           <span class="flex items-center">
-            <el-icon class="mr-1"><View /></el-icon>
+            <View class="w-4 h-4 mr-1" />
             {{ formatNumber(news.viewCount) }}
           </span>
           <span v-if="news.commentCount" class="flex items-center">
-            <el-icon class="mr-1"><ChatDotRound /></el-icon>
+            <ChatDotRound class="w-4 h-4 mr-1" />
             {{ formatNumber(news.commentCount) }}
           </span>
         </div>
@@ -85,7 +81,11 @@ import {
   formatNumber,
   getCategoryColor,
 } from "@/utils/formatUtils";
-import { View, ChatDotRound, Clock } from "@element-plus/icons-vue";
+import {
+  EyeIcon as View,
+  ChatBubbleLeftRightIcon as ChatDotRound,
+  ClockIcon as Clock,
+} from "@heroicons/vue/24/outline";
 
 interface Props {
   news: NewsItem;

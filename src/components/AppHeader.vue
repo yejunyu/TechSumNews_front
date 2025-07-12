@@ -31,36 +31,34 @@
         <div class="flex items-center space-x-4">
           <!-- 搜索框 -->
           <div class="hidden sm:block">
-            <el-input
-              v-model="searchKeyword"
-              placeholder="Search..."
-              @keyup.enter="handleSearch"
-              class="w-48"
-              size="small"
-            >
-              <template #prefix>
-                <el-icon><Search /></el-icon>
-              </template>
-            </el-input>
+            <div class="relative flex items-center">
+              <Search class="w-4 h-4 text-gray-400 search-icon" />
+              <input
+                v-model="searchKeyword"
+                type="text"
+                placeholder="Search..."
+                @keyup.enter="handleSearch"
+                class="input input-bordered input-sm w-48 pl-8"
+              />
+            </div>
           </div>
 
           <!-- 主题切换 -->
-          <el-button
-            @click="toggleTheme"
-            :icon="appStore.isDarkMode ? Sunny : Moon"
-            circle
-            size="small"
-            class="theme-toggle"
-          />
+          <button
+            @click="themeStore.toggleTheme"
+            class="btn btn-circle btn-sm theme-toggle"
+            :title="themeStore.isDark ? '切换到浅色模式' : '切换到深色模式'"
+          >
+            <component :is="themeStore.isDark ? Sunny : Moon" class="w-4 h-4" />
+          </button>
 
           <!-- 移动端菜单按钮 -->
-          <el-button
+          <button
             @click="toggleMobileMenu"
-            :icon="Menu"
-            circle
-            size="small"
-            class="md:hidden"
-          />
+            class="btn btn-circle btn-sm md:hidden"
+          >
+            <Menu class="w-4 h-4" />
+          </button>
         </div>
       </div>
 
@@ -84,16 +82,16 @@
 
         <!-- 移动端搜索 -->
         <div class="mt-4 px-4">
-          <el-input
-            v-model="searchKeyword"
-            placeholder="Search news, events..."
-            @keyup.enter="handleSearch"
-            size="small"
-          >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-input>
+          <div class="relative flex items-center">
+            <Search class="w-4 h-4 text-gray-400 search-icon" />
+            <input
+              v-model="searchKeyword"
+              type="text"
+              placeholder="Search news, events..."
+              @keyup.enter="handleSearch"
+              class="input input-bordered input-sm w-full pl-8"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -104,10 +102,17 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAppStore } from "@/stores/app";
-import { Search, Menu, Moon, Sunny } from "@element-plus/icons-vue";
+import { useThemeStore } from "@/stores/theme";
+import {
+  MagnifyingGlassIcon as Search,
+  Bars3Icon as Menu,
+  MoonIcon as Moon,
+  SunIcon as Sunny,
+} from "@heroicons/vue/24/outline";
 
 const router = useRouter();
 const appStore = useAppStore();
+const themeStore = useThemeStore();
 
 // 响应式数据
 const searchKeyword = ref("");
@@ -130,7 +135,7 @@ const handleSearch = () => {
 };
 
 const toggleTheme = () => {
-  appStore.toggleTheme();
+  themeStore.toggleTheme();
 };
 
 const toggleMobileMenu = () => {
@@ -165,6 +170,6 @@ const closeMobileMenu = () => {
 
 .app-header {
   backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: hsla(var(--b1) / 0.95);
 }
 </style>

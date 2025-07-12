@@ -1,0 +1,107 @@
+[
+  {
+    "id": "evt-001",
+    "title": "Perplexity Launches Comet AI Web Browser to Challenge Google",
+    "timestamp": "2024-07-09T08:00:00Z",
+    "summary": "Perplexity AI has officially launched Comet, a new web browser with a built-in AI assistant designed to provide direct answers and streamline web navigation. The browser aims to challenge Google's dominance by offering a conversational search experience, moving beyond the traditional list of blue links. Comet integrates real-time information and powerful automation tools, allowing users to get concise summaries and perform tasks directly within the browser. Early reviews highlight its speed and innovative sidebar assistant, but also note its premium $200 per month subscription fee, positioning it as a tool for power users and professionals.",
+    "publishers": [
+      "Techmeme",
+      "Mashable",
+      "ZDNet",
+      "TechCrunch",
+      "The Verge",
+      "Ars Technica",
+      "Wired",
+      "Engadget"
+    ],
+    "articles": [
+      {
+        "id": "art-001-1",
+        "title": "Perplexity introduces Comet browser with AI-powered automation tools"
+      },
+      {
+        "id": "art-001-2",
+        "title": "Perplexity Launches Comet AI Web Browser, Comes With an In-Built Sidebar Assistant"
+      },
+      {
+        "id": "art-001-3",
+        "title": "Perplexity launches its own AI web browser, Comet"
+      },
+      {
+        "id": "art-001-4",
+        "title": "Perplexity’s Comet AI browser is available now for $200 per month"
+      },
+      {
+        "id": "art-001-5",
+        "title": "Perplexity’s Comet AI browser is hurtling toward Chrome - how to try it"
+      },
+      {
+        "id": "art-001-6",
+        "title": "Is Perplexity's Comet the Google Chrome killer we've been waiting for?"
+      },
+      {
+        "id": "art-001-7",
+        "title": "Comet AI Browser: A Deep Dive into Perplexity's Latest Creation"
+      }
+    ],
+    "tags": ["AI", "Web Browser", "Search Engine", "Startup"]
+  },
+  {
+    "id": "evt-002",
+    "title": "Apple Unveils Apple Intelligence and Partnership with OpenAI at WWDC",
+    "timestamp": "2024-06-10T17:00:00Z",
+    "summary": "At its annual Worldwide Developers Conference (WWDC), Apple announced 'Apple Intelligence,' its new suite of AI features integrated across iOS 18, iPadOS 18, and macOS Sequoia. Key features include advanced writing tools, image generation, and a more capable Siri. In a landmark move, Apple also revealed a partnership with OpenAI to integrate ChatGPT into its ecosystem, allowing Siri to tap into the powerful language model for more complex queries. The integration is positioned as an opt-in feature, addressing user privacy concerns.",
+    "publishers": [
+      "Bloomberg",
+      "CNBC",
+      "Reuters",
+      "The Wall Street Journal",
+      "MacRumors",
+      "9to5Mac"
+    ],
+    "articles": [
+      {
+        "id": "art-002-1",
+        "title": "Apple Intelligence: All the new AI features coming to your iPhone"
+      },
+      {
+        "id": "art-002-2",
+        "title": "Apple and OpenAI Announce Partnership to Bring ChatGPT to iOS 18"
+      },
+      { "id": "art-002-3", "title": "WWDC Recap: Apple goes all-in on AI" },
+      {
+        "id": "art-002-4",
+        "title": "Siri gets a brain transplant with ChatGPT integration"
+      }
+    ],
+    "tags": ["AI", "Apple", "WWDC", "OpenAI", "iOS 18"]
+  },
+  {
+    "id": "evt-003",
+    "title": "NVIDIA Becomes World's Most Valuable Company",
+    "timestamp": "2024-06-18T20:00:00Z",
+    "summary": "NVIDIA's stock price surged, making it the world's most valuable company with a market capitalization exceeding $3.34 trillion, surpassing Microsoft and Apple. The dramatic rise is fueled by the explosive demand for its AI chips, which are essential for training large language models and other AI applications. This milestone solidifies NVIDIA's position as a dominant force in the technology sector and highlights the immense market enthusiasm for artificial intelligence.",
+    "publishers": [
+      "Reuters",
+      "Bloomberg",
+      "The Financial Times",
+      "Yahoo Finance",
+      "CNBC"
+    ],
+    "articles": [
+      {
+        "id": "art-003-1",
+        "title": "Nvidia overtakes Microsoft as world's most valuable company"
+      },
+      {
+        "id": "art-003-2",
+        "title": "The AI boom has a new king: Nvidia's market cap soars"
+      },
+      {
+        "id": "art-003-3",
+        "title": "How NVIDIA's chips powered its journey to the top"
+      }
+    ],
+    "tags": ["NVIDIA", "Stock Market", "AI Chips", "Finance"]
+  }
+]

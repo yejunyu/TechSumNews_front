@@ -124,7 +124,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { NEWS_CATEGORIES } from "@/utils/constants";
-import { Platform, Message, Share, ArrowUp } from "@element-plus/icons-vue";
+import {
+  DevicePhoneMobileIcon as Platform,
+  ChatBubbleLeftEllipsisIcon as Message,
+  ShareIcon as Share,
+  ArrowUpIcon as ArrowUp,
+} from "@heroicons/vue/24/outline";
 
 // 响应式数据
 const showBackToTop = ref(false);

@@ -296,35 +296,46 @@ onMounted(() => {
 }
 
 .category-tag {
-  @apply inline-block px-3 py-1 text-sm font-medium rounded-full;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 9999px;
 }
 
 .category-tag-ai {
-  @apply bg-blue-100 text-blue-800;
+  background-color: #dbeafe;
+  color: #1e40af;
 }
 
 .category-tag-blockchain {
-  @apply bg-purple-100 text-purple-800;
+  background-color: #e9d5ff;
+  color: #7c3aed;
 }
 
 .category-tag-internet {
-  @apply bg-green-100 text-green-800;
+  background-color: #dcfce7;
+  color: #166534;
 }
 
 .category-tag-hardware {
-  @apply bg-orange-100 text-orange-800;
+  background-color: #fed7aa;
+  color: #ea580c;
 }
 
 .category-tag-software {
-  @apply bg-indigo-100 text-indigo-800;
+  background-color: #e0e7ff;
+  color: #4338ca;
 }
 
 .category-tag-mobile {
-  @apply bg-cyan-100 text-cyan-800;
+  background-color: #cffafe;
+  color: #0891b2;
 }
 
 .category-tag-cloud {
-  @apply bg-lime-100 text-lime-800;
+  background-color: #ecfccb;
+  color: #65a30d;
 }
 
 .prose p {

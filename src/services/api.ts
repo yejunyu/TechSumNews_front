@@ -1,6 +1,8 @@
 import axios from "axios";
 import type { NewsItem, NewsResponse, FilterOptions } from "@/types/news";
 import type { TimelineEvent, TimelineFilter } from "@/types/timeline";
+import type { HighlightEvent } from "@/types/highlights";
+import type { EventGroup } from "@/types/events";
 import { API_CONFIG } from "@/utils/constants";
 
 // 创建axios实例
@@ -240,6 +242,27 @@ export class SystemAPI {
     email?: string;
   }): Promise<{ success: boolean }> {
     return api.post("/system/feedback", feedback);
+  }
+}
+
+// Events API
+export class EventsAPI {
+  static async getEvents(): Promise<EventGroup[]> {
+    const response = await axios.get(
+      `https://techsum-server-production.up.railway.app/techsum/api/v2/events`
+    );
+    return response.data;
+  }
+}
+
+// Highlights API
+export class HighlightsAPI {
+  static async getHighlights(category: string): Promise<EventGroup[]> {
+    // Note: The base URL for this specific API is different.
+    const response = await axios.get(
+      `https://techsum-server-production.up.railway.app/techsum/api/v2/highlights/${category}`
+    );
+    return response.data;
   }
 }
 

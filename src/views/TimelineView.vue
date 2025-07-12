@@ -4,7 +4,7 @@
       <!-- 页面标题 -->
       <div class="text-center mb-12">
         <h1 class="text-4xl font-bold gradient-text mb-4">科技时间线</h1>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        <p class="tech-subtitle text-lg max-w-2xl mx-auto">
           按时间顺序展示重要科技事件的发展历程
         </p>
       </div>
@@ -134,12 +134,12 @@ import { useRouter } from "vue-router";
 import { useTimelineStore } from "@/stores/timeline";
 import { formatRelativeTime, formatDateTime } from "@/utils/formatUtils";
 import {
-  TrendCharts,
-  Monitor,
-  Phone,
-  Setting,
-  DataBoard,
-} from "@element-plus/icons-vue";
+  ChartBarIcon as TrendCharts,
+  ComputerDesktopIcon as Monitor,
+  DevicePhoneMobileIcon as Phone,
+  CogIcon as Setting,
+  CircleStackIcon as DataBoard,
+} from "@heroicons/vue/24/outline";
 
 const router = useRouter();
 const timelineStore = useTimelineStore();

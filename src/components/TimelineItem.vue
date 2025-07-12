@@ -38,13 +38,14 @@
           >
             <span>{{ formatDateTime(event.date) }}</span>
             <span>·</span>
-            <el-tag
-              :type="getImportanceType(event.importance)"
-              size="small"
-              effect="plain"
+            <span
+              :class="[
+                'badge badge-sm',
+                getImportanceBadgeClass(event.importance),
+              ]"
             >
               {{ getImportanceText(event.importance) }}
-            </el-tag>
+            </span>
             <span>·</span>
             <span>{{ getCategoryName(event.category) }}</span>
           </div>
@@ -52,12 +53,9 @@
 
         <!-- 操作按钮 -->
         <div class="flex items-center space-x-2">
-          <el-button
-            @click="toggleExpand"
-            :icon="isExpanded ? ArrowUp : ArrowDown"
-            size="small"
-            text
-          />
+          <button @click="toggleExpand" class="btn btn-sm btn-ghost">
+            <component :is="isExpanded ? ArrowUp : ArrowDown" class="w-4 h-4" />
+          </button>
         </div>
       </div>
 
@@ -99,15 +97,13 @@
             标签
           </h4>
           <div class="flex flex-wrap gap-2">
-            <el-tag
+            <span
               v-for="tag in event.tags"
               :key="tag"
-              size="small"
-              type="info"
-              effect="plain"
+              class="badge badge-outline badge-sm"
             >
               {{ tag }}
-            </el-tag>
+            </span>
           </div>
         </div>
 
@@ -132,28 +128,30 @@
           class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
         >
           <span class="flex items-center">
-            <el-icon class="mr-1"><View /></el-icon>
+            <View class="w-4 h-4 mr-1" />
             {{ formatNumber(event.viewCount || 0) }}
           </span>
           <span class="flex items-center">
-            <el-icon class="mr-1"><ChatDotRound /></el-icon>
+            <ChatDotRound class="w-4 h-4 mr-1" />
             {{ formatNumber(event.commentCount || 0) }}
           </span>
         </div>
 
         <div class="flex items-center space-x-2">
-          <el-button @click="handleShare" :icon="Share" size="small" text>
+          <button @click="handleShare" class="btn btn-sm btn-ghost">
+            <Share class="w-4 h-4 mr-1" />
             分享
-          </el-button>
-          <el-button
+          </button>
+          <button
             @click="handleBookmark"
-            :icon="isFavorite ? StarFilled : Star"
-            size="small"
-            text
-            :type="isFavorite ? 'primary' : 'default'"
+            :class="['btn btn-sm', isFavorite ? 'btn-primary' : 'btn-ghost']"
           >
+            <component
+              :is="isFavorite ? StarFilled : Star"
+              class="w-4 h-4 mr-1"
+            />
             {{ isFavorite ? "已收藏" : "收藏" }}
-          </el-button>
+          </button>
         </div>
       </div>
     </div>
@@ -166,19 +164,19 @@ import type { TimelineEvent } from "@/types/timeline";
 import { formatDateTime, formatNumber } from "@/utils/formatUtils";
 import { useAppStore } from "@/stores/app";
 import {
-  ArrowUp,
-  ArrowDown,
-  View,
-  ChatDotRound,
-  Share,
-  Star,
-  StarFilled,
-  TrendCharts,
-  Monitor,
-  Phone,
-  Setting,
-  DataBoard,
-} from "@element-plus/icons-vue";
+  ArrowUpIcon as ArrowUp,
+  ArrowDownIcon as ArrowDown,
+  EyeIcon as View,
+  ChatBubbleLeftRightIcon as ChatDotRound,
+  ShareIcon as Share,
+  StarIcon as Star,
+  ChartBarIcon as TrendCharts,
+  ComputerDesktopIcon as Monitor,
+  DevicePhoneMobileIcon as Phone,
+  CogIcon as Setting,
+  CircleStackIcon as DataBoard,
+} from "@heroicons/vue/24/outline";
+import { StarIcon as StarFilled } from "@heroicons/vue/24/solid";
 
 interface Props {
   event: TimelineEvent;
@@ -226,6 +224,16 @@ const getImportanceType = (importance: string) => {
     normal: "info",
   };
   return typeMap[importance] || "info";
+};
+
+const getImportanceBadgeClass = (importance: string) => {
+  const classMap: Record<string, string> = {
+    high: "badge-error",
+    medium: "badge-warning",
+    low: "badge-success",
+    normal: "badge-info",
+  };
+  return classMap[importance] || "badge-info";
 };
 
 const getImportanceText = (importance: string) => {

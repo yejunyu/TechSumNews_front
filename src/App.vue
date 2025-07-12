@@ -5,35 +5,43 @@
       v-if="appStore.globalLoading"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
-      <el-loading />
+      <span class="loading loading-spinner loading-lg"></span>
     </div>
 
     <!-- 全局错误提示 -->
-    <el-alert
+    <div
       v-if="appStore.error"
-      :title="appStore.error"
-      type="error"
-      class="fixed top-4 right-4 z-40 max-w-md"
-      closable
-      @close="appStore.clearMessages"
-    />
+      class="alert alert-error fixed top-4 right-4 z-40 max-w-md"
+    >
+      <span>{{ appStore.error }}</span>
+      <button
+        @click="appStore.clearMessages"
+        class="btn btn-sm btn-circle btn-ghost"
+      >
+        ✕
+      </button>
+    </div>
 
     <!-- 全局成功提示 -->
-    <el-alert
+    <div
       v-if="appStore.message"
-      :title="appStore.message"
-      type="success"
-      class="fixed top-4 right-4 z-40 max-w-md"
-      closable
-      @close="appStore.clearMessages"
-    />
+      class="alert alert-success fixed top-4 right-4 z-40 max-w-md"
+    >
+      <span>{{ appStore.message }}</span>
+      <button
+        @click="appStore.clearMessages"
+        class="btn btn-sm btn-circle btn-ghost"
+      >
+        ✕
+      </button>
+    </div>
 
     <!-- 网络状态提示 -->
     <div
       v-if="!appStore.isOnline"
       class="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 z-50"
     >
-      <el-icon class="mr-2"><Connection /></el-icon>
+      <Connection class="w-4 h-4 mr-2 inline" />
       网络连接已断开，请检查您的网络设置
     </div>
 
@@ -50,8 +58,6 @@
           </transition>
         </router-view>
       </main>
-
-
     </div>
   </div>
 </template>
@@ -60,7 +66,7 @@
 import { onMounted, onUnmounted } from "vue";
 import { useAppStore } from "@/stores/app";
 import AppHeader from "@/components/AppHeader.vue";
-import { Connection } from "@element-plus/icons-vue";
+import { WifiIcon as Connection } from "@heroicons/vue/24/outline";
 
 const appStore = useAppStore();
 
