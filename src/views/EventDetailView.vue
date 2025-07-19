@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="text-xs text-right mt-1 text-base-content/50">
-          图片来源: {{ event.image_source || "未知" }}
+          Images source: {{ event.image_source || "未知" }}
         </div>
       </div>
 
@@ -62,7 +62,7 @@
         <div tabindex="0" class="collapse collapse-arrow bg-base-200">
           <input type="checkbox" checked />
           <div class="collapse-title text-base font-medium">
-            相关文章 ({{ event.article_num || event.articles.length }})
+            Articles ({{ event.article_num || event.articles.length }})
           </div>
           <div class="collapse-content">
             <ul class="space-y-2">
@@ -87,7 +87,7 @@
         <div tabindex="0" class="collapse collapse-arrow bg-base-200">
           <input type="checkbox" />
           <div class="collapse-title text-base font-medium">
-            新闻来源 ({{ event.feed_num || event.feeds.length }})
+            News source ({{ event.feed_num || event.feeds.length }})
           </div>
           <div class="collapse-content">
             <div class="flex flex-wrap gap-2">
