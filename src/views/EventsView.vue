@@ -39,9 +39,10 @@
       <!-- 事件卡片列表 -->
       <div v-else class="space-y-6">
         <StoryCard
-          v-for="event in eventsStore.filteredEvents"
+          v-for="(event, index) in eventsStore.filteredEvents"
           :key="event.group_title"
           :event="event"
+          :index="index"
         />
       </div>
     </div>

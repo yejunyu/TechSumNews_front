@@ -26,4 +26,5 @@ export interface EventGroup {
   article_num?: number;
   feed_num?: number;
   image_source?: string;
+  group_id: string;
 }

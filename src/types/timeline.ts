@@ -54,3 +54,26 @@ export interface TimeRangeOption {
     end: Date;
   };
 }
+
+// ================= External Timeline (from Railway) =================
+// These types describe the structure returned by
+// GET https://web-production-136f4.up.railway.app/timelines/{id}
+
+export interface ExternalTimelineEvent {
+  url: string;
+  title: string;
+  source: string;
+  publishedAt: string; // ISO string, e.g. 2025-07-17T10:31:10Z
+}
+
+export interface ExternalTimelinePayload {
+  events: ExternalTimelineEvent[];
+}
+
+export interface ExternalTimelineResponse {
+  id: number;
+  group_id: number;
+  status: string; // expect "COMPLETED" when ready
+  generated_at: string; // ISO string
+  timeline_data?: ExternalTimelinePayload;
+}

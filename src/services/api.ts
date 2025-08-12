@@ -1,7 +1,6 @@
 import axios from "axios";
-import type { NewsItem, NewsResponse, FilterOptions } from "@/types/news";
-import type { TimelineEvent, TimelineFilter } from "@/types/timeline";
-import type { HighlightEvent } from "@/types/highlights";
+import type { NewsItem, NewsResponse } from "@/types/news";
+import type { TimelineEvent, ExternalTimelineResponse } from "@/types/timeline";
 import type { EventGroup } from "@/types/events";
 import { API_CONFIG } from "@/utils/constants";
 
@@ -249,7 +248,7 @@ export class SystemAPI {
 export class EventsAPI {
   static async getEvents(): Promise<EventGroup[]> {
     const response = await axios.get(
-      `https://techsum-server-production.up.railway.app/techsum/api/v2/events`
+      `https://techsum-server-production.up.railway.app/techsum/api/v3/events`
     );
     return response.data;
   }
@@ -260,10 +259,21 @@ export class HighlightsAPI {
   static async getHighlights(category: string): Promise<EventGroup[]> {
     // Note: The base URL for this specific API is different.
     const response = await axios.get(
-      `https://techsum-server-production.up.railway.app/techsum/api/v2/highlights/${category}`
+      `https://techsum-server-production.up.railway.app/techsum/api/v3/highlights/${category}`
     );
     return response.data;
   }
 }
 
 export default api;
+
+// ============== External Railway Timeline API (hardcoded domain) ==============
+export class ExternalTimelineAPI {
+  static async getById(id: number): Promise<ExternalTimelineResponse> {
+    const base = import.meta.env.DEV
+      ? "/ext-timeline"
+      : "https://web-production-136f4.up.railway.app";
+    const response = await axios.get(`${base}/timelines/${id}`);
+    return response.data as ExternalTimelineResponse;
+  }
+}
