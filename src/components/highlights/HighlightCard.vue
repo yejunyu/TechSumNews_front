@@ -1,64 +1,95 @@
 <template>
   <div
-    class="card bg-base-100 shadow-md transition-shadow hover:shadow-lg mb-4"
+    class="collapse collapse-arrow bg-base-100 border border-base-300 shadow-md transition-shadow hover:shadow-lg mb-4"
   >
-    <div class="card-body p-4 md:p-6 cursor-pointer" @click="toggleExpand">
+    <input type="radio" :name="accordionGroup" :checked="defaultChecked" />
+    <div class="collapse-title p-4 md:p-6">
       <div class="flex flex-col md:flex-row gap-6">
         <!-- Left side: Text content -->
         <div class="flex-1">
           <h2 class="text-xl font-bold mb-2">
             {{ highlight.suggested_headline || highlight.event_name }}
           </h2>
-          <div
-            class="text-sm text-base-content/70 flex items-center gap-2 mb-3"
-          >
+          <div class="text-sm text-base-content/70 flex items-center gap-2">
             <span>{{ formattedDate }}</span>
             <span>•</span>
             <span>{{ highlight.feed_num }} Feeds</span>
             <span>•</span>
             <span>{{ highlight.article_num }} Articles</span>
           </div>
-          <div class="text-primary w-6 h-6" aria-label="Toggle details">
-            <ChevronDownIcon
-              class="w-full h-full transition-transform"
-              :class="{ 'rotate-180': isExpanded }"
-            />
-          </div>
         </div>
-        <!-- Right side: Image -->
+        <!-- Image Stack (left fixed) -->
         <div
-          v-if="primaryImage"
-          class="w-full md:w-48 lg:w-56 flex-shrink-0 order-first md:order-last"
+          v-if="highlight.images && highlight.images.length > 0"
+          class="w-full md:w-56 lg:w-64 flex-shrink-0 order-first"
         >
-          <figure class="h-full">
-            <img
-              :src="primaryImage"
-              :alt="highlight.suggested_headline"
-              class="w-full h-full object-cover rounded-lg"
-            />
-          </figure>
+          <div class="relative cursor-pointer" @click.stop="nextImage">
+            <!-- Active image -->
+            <div
+              :key="`active-${currentImageIndex}`"
+              class="relative w-full h-40 rounded-lg overflow-hidden hover:brightness-105 transition-brightness duration-150 z-10"
+            >
+              <img
+                v-if="activeImageUrl"
+                :src="activeImageUrl"
+                :alt="
+                  highlight.images?.[currentImageIndex]?.description ||
+                  highlight.suggested_headline
+                "
+                class="w-full h-40 object-cover pointer-events-none"
+                @error="onImageError"
+              />
+              <div
+                v-else
+                class="w-full h-40 bg-base-200 animate-pulse rounded-lg"
+              ></div>
+            </div>
+
+            <!-- Background stacked images for visual effect -->
+            <div
+              v-for="(img, index) in validImages.slice(1, 4)"
+              :key="`bg-${img.idx}`"
+              class="absolute top-0 left-0 w-full h-40 rounded-lg overflow-hidden opacity-30"
+              :style="{
+                transform: `translateX(${(index + 1) * 3}px) translateY(${
+                  (index + 1) * 3
+                }px)`,
+                zIndex: 5 - index,
+              }"
+            >
+              <img
+                :src="img.url"
+                :alt="highlight.suggested_headline"
+                class="w-full h-40 object-cover pointer-events-none"
+              />
+            </div>
+
+            <!-- Image counter and navigation -->
+            <div
+              class="absolute bottom-2 right-2 bg-base-100/80 rounded-full px-2 py-1 text-xs pointer-events-none z-20"
+            >
+              {{
+                validImages.findIndex((v) => v.idx === currentImageIndex) + 1
+              }}/{{ validImages.length }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="collapse-content px-4 md:px-6 pb-4">
+      <p v-if="highlight.explanation" class="text-base-content/90 mb-4">
+        {{ highlight.group_summary }}
+      </p>
 
-    <!-- Expandable Section -->
-    <div ref="detailsSectionRef" class="expandable-section">
-      <div class="px-4 md:px-6 pb-4 border-t pt-4">
-        <p v-if="highlight.explanation" class="text-base-content/90 mb-4">
-          {{ highlight.explanation }}
-        </p>
-
-        <!-- Nested Toggles -->
-        <div class="space-y-2">
-          <!-- Articles Toggle -->
-          <div
-            class="font-medium cursor-pointer"
-            @click.stop="showArticles = !showArticles"
-          >
+      <!-- Nested accordions -->
+      <div class="space-y-2">
+        <div class="collapse collapse-plus border border-base-300 rounded-box">
+          <input type="checkbox" />
+          <div class="collapse-title text-sm font-medium">
             Articles ({{ highlight.articles.length }})
           </div>
-          <transition name="fade">
-            <ul v-if="showArticles" class="pl-4 pt-2 space-y-2">
+          <div class="collapse-content pt-2">
+            <ul class="pl-4 space-y-2">
               <li v-for="article in highlight.articles" :key="article.link">
                 <a
                   :href="article.link"
@@ -74,17 +105,16 @@
                 </a>
               </li>
             </ul>
-          </transition>
+          </div>
+        </div>
 
-          <!-- Feeds Toggle -->
-          <div
-            class="font-medium cursor-pointer"
-            @click.stop="showFeeds = !showFeeds"
-          >
+        <div class="collapse collapse-plus border border-base-300 rounded-box">
+          <input type="checkbox" />
+          <div class="collapse-title text-sm font-medium">
             Feeds ({{ highlight.feeds.length }})
           </div>
-          <transition name="fade">
-            <div v-if="showFeeds" class="pl-4 pt-2 flex flex-wrap gap-2">
+          <div class="collapse-content pt-2">
+            <div class="pl-1 flex flex-wrap gap-2">
               <span
                 v-for="feed in highlight.feeds"
                 :key="feed"
@@ -92,7 +122,7 @@
                 >{{ feed }}</span
               >
             </div>
-          </transition>
+          </div>
         </div>
       </div>
     </div>
@@ -101,49 +131,86 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import type { HighlightEvent } from "@/types/highlights";
-import { ChevronDownIcon } from "@heroicons/vue/24/outline";
-import { gsap } from "gsap";
+import type { HighlightEvent } from "../../types/highlights";
 
 const props = defineProps<{
   highlight: HighlightEvent;
+  accordionGroup?: string;
+  defaultChecked?: boolean;
 }>();
 
-const isExpanded = ref(false);
-const showArticles = ref(false);
-const showFeeds = ref(false);
-const detailsSectionRef = ref<HTMLElement | null>(null);
+// Image navigation state stores the original index of the active image
+const currentImageIndex = ref(0);
 
-const toggleExpand = () => {
-  isExpanded.value = !isExpanded.value;
-  // Collapse nested sections when main section collapses
-  if (!isExpanded.value) {
-    showArticles.value = false;
-    showFeeds.value = false;
+const normalizeUrl = (url: string): string => {
+  const u = (url || "").trim();
+  if (!u) return "";
+  if (u.startsWith("//")) return `https:${u}`;
+  return u;
+};
+
+const rawImages = computed(() => props.highlight.images || []);
+
+// Build list of valid image indices and urls
+const validImages = computed(() =>
+  rawImages.value
+    .map((img, idx) => ({ idx, url: normalizeUrl(img.image_link) }))
+    .filter((x) => /^https?:\/\//.test(x.url))
+);
+
+const activeImageUrl = computed(() => {
+  const found = validImages.value.find(
+    (v) => v.idx === currentImageIndex.value
+  );
+  if (found) return found.url;
+  // if current is not valid, fallback to first valid
+  return validImages.value[0]?.url || "";
+});
+
+const setToFirstValid = () => {
+  if (validImages.value.length === 0) {
+    currentImageIndex.value = 0;
+  } else {
+    currentImageIndex.value = validImages.value[0].idx;
   }
 };
 
-watch(isExpanded, (shouldExpand) => {
-  const target = detailsSectionRef.value;
-  if (target) {
-    gsap.to(target, {
-      height: shouldExpand ? "auto" : 0,
-      opacity: shouldExpand ? 1 : 0,
-      duration: 0.4,
-      ease: "power2.inOut",
-      onStart: () => {
-        if (shouldExpand) {
-          target.style.display = "block";
-        }
-      },
-      onComplete: () => {
-        if (!shouldExpand) {
-          target.style.display = "none";
-        }
-      },
-    });
+const onImageError = () => {
+  // Prevent infinite loop by checking if we can switch
+  const currentPos = validImages.value.findIndex(
+    (v) => v.idx === currentImageIndex.value
+  );
+  if (currentPos === -1 || validImages.value.length <= 1) {
+    return;
   }
-});
+
+  // Try next image only once per error
+  const nextPos = (currentPos + 1) % validImages.value.length;
+  const newIndex = validImages.value[nextPos].idx;
+  currentImageIndex.value = newIndex;
+};
+
+// Reset / initialize on data change
+watch(
+  () => rawImages.value.length,
+  () => {
+    setToFirstValid();
+  },
+  { immediate: true }
+);
+
+// Advance within valid images only
+const nextImage = () => {
+  if (validImages.value.length <= 1) {
+    return;
+  }
+  const pos = validImages.value.findIndex(
+    (v) => v.idx === currentImageIndex.value
+  );
+  const nextPos = (pos + 1) % validImages.value.length;
+  const newIndex = validImages.value[nextPos].idx;
+  currentImageIndex.value = newIndex;
+};
 
 const primaryImage = computed(() => {
   if (props.highlight.images && props.highlight.images.length > 0) {
@@ -173,21 +240,5 @@ const formattedDate = computed(() => {
 </script>
 
 <style scoped>
-.expandable-section {
-  height: 0;
-  opacity: 0;
-  overflow: hidden;
-  display: none;
-}
-.rotate-180 {
-  transform: rotate(180deg);
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style> 
+/* No extra styles needed; using DaisyUI collapse */
+</style>

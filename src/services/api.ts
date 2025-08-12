@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { NewsItem, NewsResponse } from "@/types/news";
-import type { TimelineEvent, ExternalTimelineResponse } from "@/types/timeline";
+import type { TimelineEvent, ExternalTimelinePayload } from "../types/timeline";
 import type { EventGroup } from "@/types/events";
 import { API_CONFIG } from "@/utils/constants";
 
@@ -269,11 +269,11 @@ export default api;
 
 // ============== External Railway Timeline API (hardcoded domain) ==============
 export class ExternalTimelineAPI {
-  static async getById(id: number): Promise<ExternalTimelineResponse> {
+  static async getById(id: string): Promise<ExternalTimelinePayload> {
     const base = import.meta.env.DEV
       ? "/ext-timeline"
       : "https://web-production-136f4.up.railway.app";
     const response = await axios.get(`${base}/timelines/${id}`);
-    return response.data as ExternalTimelineResponse;
+    return response.data as ExternalTimelinePayload;
   }
 }

@@ -52,54 +52,14 @@
             <component :is="themeStore.isDark ? Sunny : Moon" class="w-4 h-4" />
           </button>
 
-          <div>
+          <!-- <div>
             <SignedOut>
               <SignInButton />
             </SignedOut>
             <SignedIn>
               <UserButton />
             </SignedIn>
-          </div>
-          <!-- 移动端菜单按钮 -->
-          <button
-            @click="toggleMobileMenu"
-            class="btn btn-circle btn-sm md:hidden"
-          >
-            <Menu class="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      <!-- 移动端导航菜单 -->
-      <div
-        v-show="showMobileMenu"
-        class="md:hidden border-t border-gray-200 py-4"
-      >
-        <div class="flex flex-col space-y-2">
-          <router-link
-            v-for="item in navItems"
-            :key="item.path"
-            :to="item.path"
-            class="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
-            active-class="text-blue-600 bg-blue-50"
-            @click="closeMobileMenu"
-          >
-            {{ item.name }}
-          </router-link>
-        </div>
-
-        <!-- 移动端搜索 -->
-        <div class="mt-4 px-4">
-          <div class="relative flex items-center">
-            <Search class="w-4 h-4 text-gray-400 search-icon" />
-            <input
-              v-model="searchKeyword"
-              type="text"
-              placeholder="Search news, events..."
-              @keyup.enter="handleSearch"
-              class="input input-bordered input-sm w-full pl-8"
-            />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

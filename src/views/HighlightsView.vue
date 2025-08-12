@@ -56,6 +56,8 @@
             v-for="(highlight, index) in highlightsList"
             :key="highlight.articles[0]?.link || index"
             :highlight="highlight"
+            :accordion-group="`highlights-${selectedCategory}`"
+            :default-checked="index === 0"
           />
         </div>
       </div>
@@ -65,9 +67,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { HighlightsAPI } from "@/services/api";
-import HighlightCard from "@/components/highlights/HighlightCard.vue";
-import type { HighlightEvent } from "@/types/highlights";
+import { HighlightsAPI } from "../services/api";
+import HighlightCard from "../components/highlights/HighlightCard.vue";
+import type { HighlightEvent } from "../types/highlights";
 
 // Categories with slugs matching the API endpoints
 const categories = ref([

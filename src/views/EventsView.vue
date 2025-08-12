@@ -37,12 +37,14 @@
       </div>
 
       <!-- 事件卡片列表 -->
-      <div v-else class="space-y-6">
+      <div v-else class="space-y-4">
         <StoryCard
           v-for="(event, index) in eventsStore.filteredEvents"
           :key="event.group_title"
           :event="event"
           :index="index"
+          accordion-group="events-accordion"
+          :default-checked="index === 0"
         />
       </div>
     </div>
@@ -51,9 +53,9 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useEventsStore } from "@/stores/events";
-import EventsFilterBar from "@/components/events/EventsFilterBar.vue";
-import StoryCard from "@/components/events/StoryCard.vue";
+import { useEventsStore } from "../stores/events";
+import EventsFilterBar from "../components/events/EventsFilterBar.vue";
+import StoryCard from "../components/events/StoryCard.vue";
 
 const eventsStore = useEventsStore();
 

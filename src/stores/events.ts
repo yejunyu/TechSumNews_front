@@ -1,7 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import type { EventGroup } from "@/types/events";
-import { EventsAPI } from "@/services/api";
+import type { EventGroup } from "../types/events";
+import { EventsAPI } from "../services/api";
 
 type SortType = "Popular" | "Trends" | "Latest";
 type DayFilter = "All" | "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat";
@@ -11,7 +11,7 @@ export const useEventsStore = defineStore("events", () => {
   const loading = ref(false);
   const error = ref<string | null>(null);
 
-  const sortType = ref<SortType>("Popular");
+  const sortType = ref<SortType>("Trends");
   const dayFilter = ref<DayFilter>("All");
 
   const fetchEvents = async () => {

@@ -2,6 +2,7 @@ import "./assets/main.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { MotionPlugin } from "@vueuse/motion";
 
 import App from "./App.vue";
 import router from "./router";
@@ -16,6 +17,7 @@ const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
+app.use(MotionPlugin);
 
 // 初始化主题系统
 const themeStore = useThemeStore();

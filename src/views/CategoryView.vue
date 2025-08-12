@@ -27,33 +27,43 @@
       </div>
     </div>
 
-    <!-- 筛选和排序 -->
-    <div class="bg-white shadow-sm border-b">
+    <!-- 筛选和排序（DaisyUI） -->
+    <div class="bg-base-100 shadow-sm border-b">
       <div class="container mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
-            <span class="text-sm text-gray-600"
-              >共 {{ newsStore.filteredNews.length }} 条新闻</span
-            >
-            <el-divider direction="vertical" />
-            <el-radio-group v-model="viewMode" size="small">
-              <el-radio-button label="list">列表</el-radio-button>
-              <el-radio-button label="grid">网格</el-radio-button>
-            </el-radio-group>
+          <div class="flex items-center gap-4">
+            <span class="text-sm text-base-content/70">
+              共 {{ newsStore.filteredNews.length }} 条新闻
+            </span>
+            <div class="join">
+              <button
+                class="btn btn-sm join-item"
+                :class="{ 'btn-active btn-primary': viewMode === 'list' }"
+                @click="viewMode = 'list'"
+              >
+                列表
+              </button>
+              <button
+                class="btn btn-sm join-item"
+                :class="{ 'btn-active btn-primary': viewMode === 'grid' }"
+                @click="viewMode = 'grid'"
+              >
+                网格
+              </button>
+            </div>
           </div>
 
-          <div class="flex items-center space-x-2">
-            <span class="text-sm text-gray-600">排序:</span>
-            <el-select
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-base-content/70">排序:</span>
+            <select
               v-model="sortBy"
               @change="handleSort"
-              class="w-32"
-              size="small"
+              class="select select-bordered select-sm w-36"
             >
-              <el-option label="最新" value="publishTime" />
-              <el-option label="热门" value="viewCount" />
-              <el-option label="点赞" value="likes" />
-            </el-select>
+              <option value="publishTime">最新</option>
+              <option value="viewCount">热门</option>
+              <option value="likes">点赞</option>
+            </select>
           </div>
         </div>
       </div>
@@ -62,150 +72,179 @@
     <!-- 新闻内容 -->
     <div class="container mx-auto px-6 py-8">
       <div v-if="newsStore.loading" class="flex justify-center py-12">
-        <el-loading />
+        <span class="loading loading-spinner loading-lg text-primary"></span>
       </div>
 
       <div
         v-else-if="newsStore.filteredNews.length === 0"
         class="text-center py-12"
       >
-        <el-empty description="该分类下暂无新闻" />
-        <el-button type="primary" @click="goHome" class="mt-4"
-          >浏览其他分类</el-button
-        >
+        <div class="text-6xl mb-3">📰</div>
+        <p class="text-base-content/70 mb-4">该分类下暂无新闻</p>
+        <button class="btn btn-primary" @click="goHome">浏览其他分类</button>
       </div>
 
-      <!-- 列表视图 -->
-      <div v-else-if="viewMode === 'list'" class="space-y-6">
-        <article
-          v-for="news in paginatedNews"
-          :key="news.id"
-          class="bg-white rounded-lg shadow-card p-6 hover:shadow-card-hover transition-shadow cursor-pointer"
-          @click="goToNews(news.id)"
-        >
-          <div class="flex space-x-4">
-            <img
-              :src="news.imageUrl"
-              :alt="news.title"
-              class="w-32 h-24 object-cover rounded-lg flex-shrink-0"
-            />
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between mb-2">
-                <h2
-                  class="text-xl font-semibold text-gray-900 line-clamp-2 flex-1"
-                >
-                  {{ news.title }}
-                </h2>
-                <el-tag
-                  v-if="news.isHot"
-                  type="danger"
-                  size="small"
-                  class="ml-2"
-                  >热门</el-tag
-                >
-              </div>
-
-              <p class="text-gray-600 mb-4 line-clamp-2">{{ news.summary }}</p>
-
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                  <span>{{ news.author }}</span>
-                  <span>·</span>
-                  <span>{{ formatRelativeTime(news.publishTime) }}</span>
-                  <span>·</span>
-                  <span>{{ formatNumber(news.viewCount) }} 浏览</span>
-                  <span>·</span>
-                  <span>{{ news.likes }} 点赞</span>
-                </div>
-
-                <div class="flex flex-wrap gap-1">
-                  <el-tag
-                    v-for="tag in news.tags.slice(0, 3)"
-                    :key="tag"
-                    size="small"
-                    type="info"
-                  >
-                    {{ tag }}
-                  </el-tag>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <!-- 网格视图 -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 列表视图（Card + Collapse） -->
+      <div v-else-if="viewMode === 'list'" class="space-y-4">
         <div
           v-for="news in paginatedNews"
           :key="news.id"
-          class="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-shadow cursor-pointer"
-          @click="goToNews(news.id)"
+          class="card bg-base-100 shadow tech-card"
         >
-          <div class="relative">
-            <img
-              :src="news.imageUrl"
-              :alt="news.title"
-              class="w-full h-48 object-cover"
-            />
-            <el-tag
-              v-if="news.isHot"
-              type="danger"
-              size="small"
-              class="absolute top-2 right-2"
-            >
-              热门
-            </el-tag>
-          </div>
-
-          <div class="p-4">
-            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">
-              {{ news.title }}
-            </h3>
-            <p class="text-gray-600 text-sm mb-3 line-clamp-2">
-              {{ news.summary }}
-            </p>
-
-            <div
-              class="flex items-center justify-between text-sm text-gray-500 mb-3"
-            >
-              <span>{{ news.author }}</span>
-              <span>{{ formatRelativeTime(news.publishTime) }}</span>
-            </div>
-
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3 text-xs text-gray-500">
-                <span>{{ formatNumber(news.viewCount) }} 浏览</span>
-                <span>{{ news.likes }} 点赞</span>
+          <div class="card-body p-0">
+            <div class="collapse collapse-arrow">
+              <input type="checkbox" />
+              <div class="collapse-title">
+                <div class="flex gap-4 items-start">
+                  <img
+                    :src="news.imageUrl"
+                    :alt="news.title"
+                    class="w-32 h-24 object-cover rounded-lg flex-shrink-0"
+                  />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between">
+                      <h2
+                        class="text-lg font-semibold text-base-content line-clamp-2 flex-1"
+                      >
+                        {{ news.title }}
+                      </h2>
+                      <span
+                        v-if="news.isHot"
+                        class="badge badge-error badge-sm ml-2"
+                        >热门</span
+                      >
+                    </div>
+                    <div
+                      class="mt-2 flex items-center gap-3 text-sm text-base-content/60"
+                    >
+                      <span>{{ news.author }}</span>
+                      <span>·</span>
+                      <span>{{ formatRelativeTime(news.publishTime) }}</span>
+                      <span>·</span>
+                      <span>{{ formatNumber(news.viewCount) }} 浏览</span>
+                      <span>·</span>
+                      <span>{{ news.likes }} 点赞</span>
+                    </div>
+                    <div class="mt-2 flex flex-wrap gap-1">
+                      <span
+                        v-for="tag in news.tags.slice(0, 3)"
+                        :key="tag"
+                        class="badge badge-outline badge-sm"
+                        >{{ tag }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div class="flex flex-wrap gap-1">
-                <el-tag
-                  v-for="tag in news.tags.slice(0, 2)"
-                  :key="tag"
-                  size="small"
-                  type="info"
-                >
-                  {{ tag }}
-                </el-tag>
+              <div class="collapse-content">
+                <p class="text-base-content/70 mb-3">{{ news.summary }}</p>
+                <div class="card-actions justify-end">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click.stop="goToNews(news.id)"
+                  >
+                    阅读更多
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 分页 -->
+      <!-- 网格视图（Card + Collapse） -->
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="news in paginatedNews"
+          :key="news.id"
+          class="card bg-base-100 shadow tech-card"
+        >
+          <figure class="relative">
+            <img
+              :src="news.imageUrl"
+              :alt="news.title"
+              class="w-full h-48 object-cover"
+            />
+            <span
+              v-if="news.isHot"
+              class="badge badge-error badge-sm absolute top-2 right-2"
+              >热门</span
+            >
+          </figure>
+          <div class="card-body">
+            <h3 class="card-title text-base-content line-clamp-2">
+              {{ news.title }}
+            </h3>
+            <div
+              class="text-sm text-base-content/60 flex items-center justify-between"
+            >
+              <span>{{ news.author }}</span>
+              <span>{{ formatRelativeTime(news.publishTime) }}</span>
+            </div>
+            <div class="flex flex-wrap gap-1 mt-2">
+              <span
+                v-for="tag in news.tags.slice(0, 2)"
+                :key="tag"
+                class="badge badge-outline badge-sm"
+                >{{ tag }}</span
+              >
+            </div>
+            <div
+              class="mt-2 collapse collapse-arrow border border-base-300 rounded-box"
+            >
+              <input type="checkbox" />
+              <div class="collapse-title p-0 text-sm text-base-content/70">
+                展开摘要
+              </div>
+              <div class="collapse-content p-0 pt-2">
+                <p class="text-sm text-base-content/70 line-clamp-3">
+                  {{ news.summary }}
+                </p>
+                <div class="card-actions justify-end mt-3">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    @click.stop="goToNews(news.id)"
+                  >
+                    阅读更多
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分页（DaisyUI） -->
       <div
         v-if="newsStore.filteredNews.length > pageSize"
-        class="flex justify-center mt-8"
+        class="flex items-center justify-center gap-4 mt-8"
       >
-        <el-pagination
-          v-model:current-page="currentPage"
-          :page-size="pageSize"
-          :total="newsStore.filteredNews.length"
-          layout="prev, pager, next, total, jumper"
-          @current-change="handlePageChange"
-        />
+        <div class="join">
+          <button
+            class="btn btn-sm join-item"
+            :disabled="currentPage === 1"
+            @click="handlePageChange(currentPage - 1)"
+          >
+            上一页
+          </button>
+          <button
+            v-for="p in pageNumbers"
+            :key="p"
+            class="btn btn-sm join-item"
+            :class="{ 'btn-active btn-primary': p === currentPage }"
+            @click="handlePageChange(p)"
+          >
+            {{ p }}
+          </button>
+          <button
+            class="btn btn-sm join-item"
+            :disabled="currentPage === totalPages"
+            @click="handlePageChange(currentPage + 1)"
+          >
+            下一页
+          </button>
+        </div>
+        <div class="text-sm text-base-content/60">共 {{ totalPages }} 页</div>
       </div>
     </div>
   </div>
@@ -214,9 +253,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import { useNewsStore } from "@/stores/news";
-import { NEWS_CATEGORIES } from "@/utils/constants";
-import { formatRelativeTime, formatNumber } from "@/utils/formatUtils";
+import { useNewsStore } from "../stores/news";
+import { NEWS_CATEGORIES } from "../utils/constants";
+import { formatRelativeTime, formatNumber } from "../utils/formatUtils";
 
 const router = useRouter();
 const newsStore = useNewsStore();
@@ -241,6 +280,16 @@ const paginatedNews = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   const end = start + pageSize.value;
   return newsStore.filteredNews.slice(start, end);
+});
+
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(newsStore.filteredNews.length / pageSize.value))
+);
+
+const pageNumbers = computed(() => {
+  const pages: number[] = [];
+  for (let i = 1; i <= totalPages.value; i += 1) pages.push(i);
+  return pages;
 });
 
 // 方法
@@ -284,6 +333,7 @@ const handleSort = () => {
 };
 
 const handlePageChange = (page: number) => {
+  if (page < 1 || page > totalPages.value) return;
   currentPage.value = page;
   window.scrollTo({ top: 0, behavior: "smooth" });
 };

@@ -1,15 +1,11 @@
 <template>
   <div
-    class="story-card bg-base-100 rounded-lg shadow-md border border-base-300 transition-all duration-300 ease-in-out"
-    @click="goToDetail"
-    style="cursor: pointer"
+    class="collapse collapse-arrow bg-base-100 border border-base-300 shadow-md transition-shadow hover:shadow-lg mb-4"
   >
-    <div class="p-6">
+    <input type="radio" :name="accordionGroup" :checked="defaultChecked" />
+    <div class="collapse-title p-6">
       <!-- 标题 -->
-      <h2
-        class="text-xl font-bold cursor-pointer hover:text-primary transition-colors"
-        @click.stop="goToDetail"
-      >
+      <h2 class="text-xl font-bold hover:text-primary transition-colors">
         {{ event.group_title }}
       </h2>
 
@@ -27,49 +23,95 @@
             <span>{{ event.importance?.toFixed(2) }}</span>
           </div>
         </div>
-        <span class="cursor-pointer hover:underline" @click.stop>
-          {{ event.feeds?.length || 0 }} Feeds
-        </span>
-        <span class="cursor-pointer hover:underline" @click.stop>
-          {{ event.articles?.length || 0 }} Articles
-        </span>
+        <span>{{ event.feeds?.length || 0 }} Feeds</span>
+        <span>{{ event.articles?.length || 0 }} Articles</span>
       </div>
     </div>
 
-    <!-- 图片预览（仅展示第一张） -->
-    <div v-if="event.images && event.images.length" class="px-6 pb-2">
-      <img
-        :src="event.images[0].image_link"
-        :alt="event.images[0].description"
-        class="w-full h-40 object-cover rounded-lg"
-      />
-    </div>
+    <div class="collapse-content px-6 pb-6">
+      <!-- 图片预览（仅展示第一张） -->
+      <div v-if="event.images && event.images.length" class="pb-2">
+        <img
+          :src="event.images[0].image_link"
+          :alt="event.images[0].description"
+          class="w-full h-40 object-cover rounded-lg"
+        />
+      </div>
 
-    <!-- 摘要 -->
-    <div class="px-6 pb-4 prose max-w-none">
-      <p v-for="(line, i) in event.group_summary.split('|')" :key="i">
-        {{ line }}
-      </p>
-    </div>
+      <!-- 摘要 -->
+      <div class="prose max-w-none pb-4">
+        <p v-for="(line, i) in event.group_summary.split('|')" :key="i">
+          {{ line }}
+        </p>
+      </div>
 
-    <!-- Timeline (lazy) -->
-    <div class="px-6 pb-6">
-      <div class="flex items-center justify-between mb-3">
-        <div class="text-sm font-medium text-base-content/70">
-          #{{ timelineId }} Timeline
+      <!-- Articles 和 Feeds 展示区 -->
+      <div class="space-y-4">
+        <!-- Articles -->
+        <div v-if="event.articles && event.articles.length > 0">
+          <h3 class="text-lg font-semibold mb-3 text-base-content">
+            <span class="text-red-500"
+              >{{ event.articles.length }} Articles</span
+            >
+          </h3>
+          <div class="space-y-2">
+            <div
+              v-for="article in event.articles"
+              :key="article.link"
+              class="text-sm text-base-content/80 hover:text-primary transition-colors"
+            >
+              <a
+                :href="article.link"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:underline"
+                @click.stop
+              >
+                {{ article.title }}
+                <span class="text-xs text-base-content/50 ml-1"
+                  >({{ article.feed }})</span
+                >
+              </a>
+            </div>
+          </div>
         </div>
-        <button
-          class="btn btn-sm"
-          :class="isTimelineOpen ? 'btn-ghost' : 'btn-outline'"
-          @click.stop="onToggleTimeline"
-        >
-          <span
-            v-if="isTimelineLoading"
-            class="loading loading-spinner loading-xs mr-2"
-          ></span>
-          {{ isTimelineOpen ? "Hide timeline" : "Show timeline" }}
-        </button>
+
+        <!-- Publishers/Feeds -->
+        <div v-if="event.feeds && event.feeds.length > 0">
+          <h3 class="text-lg font-semibold mb-3 text-base-content">
+            Publishers:
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            <span
+              v-for="feed in event.feeds"
+              :key="feed"
+              class="badge badge-outline badge-sm"
+            >
+              {{ feed }}
+            </span>
+          </div>
+        </div>
       </div>
+
+      <!-- Timeline 操作区 -->
+      <div class="mt-6 pt-4 border-t border-base-300">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-sm font-medium text-base-content/70">Timeline:</div>
+          <button
+            class="btn btn-sm"
+            :class="isTimelineOpen ? 'btn-ghost' : 'btn-outline'"
+            @click.stop="onToggleTimeline"
+          >
+            <span
+              v-if="isTimelineLoading"
+              class="loading loading-spinner loading-xs mr-2"
+            ></span>
+            {{ isTimelineOpen ? "Hide timeline" : "Show timeline" }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Timeline 内容区 -->
 
       <transition name="fade">
         <div
@@ -83,26 +125,18 @@
             ></span>
           </div>
 
-          <!-- Error -->
-          <div v-else-if="timelineError" class="alert alert-error">
-            <span>{{ readableError }}</span>
-            <button class="btn btn-sm ml-auto" @click.stop="retry">
-              Retry
-            </button>
-          </div>
-
-          <!-- Empty -->
+          <!-- Empty or Error - both show same message -->
           <div
-            v-else-if="!timelineItems.length"
-            class="text-sm text-base-content/60 py-2"
+            v-else-if="timelineError || !timelineItems.length"
+            class="text-sm text-base-content/60 py-2 text-center"
           >
-            暂无时间线
+            No timeline available
           </div>
 
-          <!-- Timeline list -->
-          <div v-else class="space-y-2">
+          <!-- Timeline list (最多显示5个) - 使用 DaisyUI Timeline 组件 -->
+          <div v-else>
             <ul class="timeline timeline-vertical">
-              <li v-for="(item, idx) in visibleTimelineItems" :key="idx">
+              <li v-for="(item, idx) in timelineItems.slice(0, 5)" :key="idx">
                 <div class="timeline-middle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -111,32 +145,43 @@
                     class="w-5 h-5 text-primary"
                   >
                     <path
-                      d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm4.5-1a.5.5 0 000 1h7a.5.5 0 000-1h-7z"
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L8.81 10.4a.75.75 0 00-1.121 1.006l1.474 1.643a.75.75 0 001.121-.006l3.643-5.09a.75.75 0 000-.853z"
+                      clip-rule="evenodd"
                     />
                   </svg>
                 </div>
-                <div :class="['timeline-' + (idx % 2 === 0 ? 'start' : 'end')]">
+                <div
+                  :class="[
+                    'timeline-' + (idx % 2 === 0 ? 'start' : 'end'),
+                    'mb-10',
+                  ]"
+                >
+                  <time class="font-mono italic text-xs text-base-content/60">
+                    {{ formatDate(item.publishedAt) }}
+                  </time>
+                  <div class="text-lg font-black text-base-content mb-1">
+                    {{ item.source }}
+                  </div>
                   <a
                     :href="item.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="font-medium hover:underline"
+                    class="text-sm text-base-content/80 hover:text-primary transition-colors leading-relaxed block hover:underline"
+                    @click.stop
                   >
                     {{ item.title }} ↗
                   </a>
-                  <div class="text-xs text-base-content/60 mt-1">
-                    <span class="mr-2">{{ item.source }}</span>
-                    <span>{{ formatDate(item.publishedAt) }}</span>
-                  </div>
                 </div>
-                <hr />
+                <hr v-if="idx < timelineItems.slice(0, 5).length - 1" />
               </li>
             </ul>
 
-            <div v-if="hasMoreItems" class="text-center pt-2">
-              <button class="btn btn-xs btn-outline" @click.stop="toggleMore">
-                {{ showAll ? "View less" : "View more" }}
-              </button>
+            <!-- 显示总数 -->
+            <div v-if="timelineItems.length > 5" class="text-center pt-4">
+              <span class="text-xs text-base-content/60">
+                Showing 5 of {{ timelineItems.length }} timeline items
+              </span>
             </div>
           </div>
         </div>
@@ -156,6 +201,8 @@ import { ExternalTimelineAPI } from "../../services/api";
 const props = defineProps<{
   event: EventGroup;
   index?: number;
+  accordionGroup?: string;
+  defaultChecked?: boolean;
 }>();
 
 const router = useRouter();
@@ -189,28 +236,15 @@ const formattedTimestamp = computed(() => {
 });
 
 // ---------- Timeline states ----------
-const DEFAULT_VISIBLE_COUNT = 4;
 const isTimelineOpen = ref(false);
 const isTimelineLoading = ref(false);
 const timelineError = ref<string | null>(null);
 const timelineItems = ref<ExternalTimelineEvent[]>([]);
-const showAll = ref(false);
 
-// module-level cache (per file scope)
-const timelineCache: Map<number, ExternalTimelineEvent[]> =
+// module-level cache using group_id
+const timelineCache: Map<string, ExternalTimelineEvent[]> =
   (globalThis as any).__storyCardTimelineCache__ || new Map();
 (globalThis as any).__storyCardTimelineCache__ = timelineCache;
-
-const timelineId = computed(() => (props.index ?? 0) + 1);
-
-const visibleTimelineItems = computed(() => {
-  if (showAll.value) return timelineItems.value;
-  return timelineItems.value.slice(0, DEFAULT_VISIBLE_COUNT);
-});
-
-const hasMoreItems = computed(
-  () => timelineItems.value.length > DEFAULT_VISIBLE_COUNT
-);
 
 const formatDate = (iso: string): string => {
   const d = dayjs(iso);
@@ -219,23 +253,32 @@ const formatDate = (iso: string): string => {
 };
 
 const loadTimeline = async () => {
-  const id = timelineId.value;
-  if (timelineCache.has(id)) {
-    timelineItems.value = timelineCache.get(id) || [];
+  const groupId = props.event.group_id;
+  if (!groupId) {
+    timelineItems.value = [];
     return;
   }
+
+  if (timelineCache.has(groupId)) {
+    timelineItems.value = timelineCache.get(groupId) || [];
+    return;
+  }
+
   isTimelineLoading.value = true;
   timelineError.value = null;
   try {
-    const res = await ExternalTimelineAPI.getById(id);
-    if (res.status === "COMPLETED" && res.timeline_data?.events?.length) {
-      timelineItems.value = res.timeline_data.events;
-      timelineCache.set(id, timelineItems.value);
+    // 使用 group_id 作为 timeline ID
+    const res = await ExternalTimelineAPI.getById(groupId);
+    if (res.events && res.events.length > 0) {
+      timelineItems.value = res.events;
+      timelineCache.set(groupId, timelineItems.value);
     } else {
       timelineItems.value = [];
     }
   } catch (e: any) {
-    timelineError.value = e?.message || "Failed to load timeline";
+    // 不显示错误，直接设置为空数组，会显示 "No timeline available"
+    timelineItems.value = [];
+    timelineCache.set(groupId, []); // 缓存空结果，避免重复请求
   } finally {
     isTimelineLoading.value = false;
   }
@@ -253,21 +296,7 @@ const onToggleTimeline = async () => {
   }
 };
 
-const retry = async () => {
-  await loadTimeline();
-};
-
-const toggleMore = () => {
-  showAll.value = !showAll.value;
-};
-
-const readableError = computed(() => {
-  if (!timelineError.value) return "";
-  // Normalize common network/CORS errors for better UX
-  if (/network error/i.test(timelineError.value)) return "Network Error";
-  if (/cors/i.test(timelineError.value)) return "CORS Error";
-  return timelineError.value;
-});
+// No retry function needed since we don't show errors
 </script>
 
 <style scoped>

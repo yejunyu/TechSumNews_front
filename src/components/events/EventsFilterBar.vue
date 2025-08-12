@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { useEventsStore } from "@/stores/events";
+import { useEventsStore } from "../../stores/events";
 
 const eventsStore = useEventsStore();
 
