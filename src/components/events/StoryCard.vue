@@ -254,6 +254,7 @@ const formatDate = (iso: string): string => {
 
 const loadTimeline = async () => {
   const groupId = props.event.group_id;
+
   if (!groupId) {
     timelineItems.value = [];
     return;
@@ -269,11 +270,18 @@ const loadTimeline = async () => {
   try {
     // 使用 group_id 作为 timeline ID
     const res = await ExternalTimelineAPI.getById(groupId);
-    if (res.events && res.events.length > 0) {
+
+    if (
+      res &&
+      res.events &&
+      Array.isArray(res.events) &&
+      res.events.length > 0
+    ) {
       timelineItems.value = res.events;
       timelineCache.set(groupId, timelineItems.value);
     } else {
       timelineItems.value = [];
+      timelineCache.set(groupId, []);
     }
   } catch (e: any) {
     // 不显示错误，直接设置为空数组，会显示 "No timeline available"

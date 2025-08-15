@@ -15,7 +15,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // Proxy for external Railway timeline API to avoid browser CORS in dev
+      // 本地开发代理，避免CORS问题
       "/ext-timeline": {
         target: "https://web-production-136f4.up.railway.app",
         changeOrigin: true,

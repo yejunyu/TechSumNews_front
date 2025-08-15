@@ -270,10 +270,19 @@ export default api;
 // ============== External Railway Timeline API (hardcoded domain) ==============
 export class ExternalTimelineAPI {
   static async getById(id: string): Promise<ExternalTimelinePayload> {
-    const base = import.meta.env.DEV
-      ? "/ext-timeline"
-      : "https://web-production-136f4.up.railway.app";
-    const response = await axios.get(`${base}/timelines/${id}`);
+    // 调试信息：查看环境变量
+    console.log("🔍 Environment Debug:");
+    console.log("  import.meta.env.DEV:", import.meta.env.DEV);
+    console.log("  import.meta.env.PROD:", import.meta.env.PROD);
+    console.log("  import.meta.env.MODE:", import.meta.env.MODE);
+
+    const url = import.meta.env.DEV
+      ? `/ext-timeline/timelines/${id}` // 本地开发：使用Vite代理
+      : `/api/timeline?id=${id}`; // 生产环境：使用Vercel API代理
+
+    console.log("📡 API URL:", url);
+
+    const response = await axios.get(url);
     return response.data as ExternalTimelinePayload;
   }
 }
