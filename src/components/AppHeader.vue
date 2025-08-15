@@ -67,19 +67,10 @@
 </template>
 
 <script setup lang="ts">
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  useUser,
-} from "@clerk/vue";
-
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAppStore } from "@/stores/app";
 import { useThemeStore } from "@/stores/theme";
-import { watchEffect } from "vue";
 
 import {
   MagnifyingGlassIcon as Search,
@@ -123,19 +114,6 @@ const toggleMobileMenu = () => {
 const closeMobileMenu = () => {
   showMobileMenu.value = false;
 };
-const { isLoaded, isSignedIn, user } = useUser();
-watchEffect(() => {
-  // isLoaded确保Clerk状态已加载完毕
-  // isSignedIn确保用户已登录
-  // user.value确保用户信息存在
-  if (isLoaded.value && isSignedIn.value && user.value) {
-    console.log(user.value);
-
-    console.log("用户已登录，信息如下:", user.value);
-    console.log("用户唯一ID:", user.value.id);
-    console.log("用户邮箱:", user.value.primaryEmailAddress?.emailAddress);
-  }
-});
 </script>
 
 <style scoped>
