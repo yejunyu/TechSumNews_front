@@ -5,11 +5,11 @@
         <!-- Logo和品牌 -->
         <div class="flex items-center space-x-4">
           <router-link to="/" class="flex items-center space-x-2">
-            <div
-              class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"
-            >
-              <span class="text-white font-bold text-sm">T</span>
-            </div>
+            <img
+              src="/image.png"
+              alt="TechSum Logo"
+              class="w-8 h-8 rounded-lg"
+            />
             <span class="text-xl font-bold text-gray-900">TechSum</span>
           </router-link>
         </div>
